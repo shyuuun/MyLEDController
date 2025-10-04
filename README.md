@@ -3,6 +3,11 @@
 -   I have this WS2812b LED strip laying around and I wanted to use it in my room. The problem is I don't have a controller for it yet
     So I decided to make one myself using an ESP32 S2 mini.
 
+-   TODO:
+-   [ ] Add more effects
+-   [ ] Add a web interface to control the effects
+-   [ ] Consider implement using IR remote control
+
 ## Project Details
 
 -   Microcontroller: ESP32 S2 Mini
