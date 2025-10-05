@@ -1,4 +1,5 @@
 #include <web-server/web-server.h>
+#include <led/LED.h>
 
 AsyncWebServer server(80);
 
@@ -20,6 +21,40 @@ void serverRoutes() {
     } else {
         Serial.println("Could not find index.html");
         request->send(404, "text/plain", "404: Not Found");
+    }
+  });
+
+  server.on("/led", HTTP_GET, [](AsyncWebServerRequest *request){
+    String state;
+    if (request->hasParam("state")) {
+      state = request->getParam("state")->value();
+      if (state == "on") {
+        turnOn();
+      } else if (state == "off") {
+        turnOff();
+      }
+    }
+    request->send(200, "text/plain", "OK");
+  });
+
+  server.onNotFound([](AsyncWebServerRequest *request){
+    String path = request->url();
+    String contentType = "text/plain";
+    bool known_type = false;
+
+    if (path.endsWith(".css")) {
+      contentType = "text/css";
+      known_type = true;
+    } else if (path.endsWith(".js")) {
+      contentType = "application/javascript";
+      known_type = true;
+    }
+
+    if (known_type && LittleFS.exists(path)) {
+      request->send(LittleFS, path, contentType);
+    } else {
+      Serial.printf("NOT_FOUND: %s\n", request->url().c_str());
+      request->send(404, "text/plain", "404: Not Found");
     }
   });
 

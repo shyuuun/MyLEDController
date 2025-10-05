@@ -11,4 +11,14 @@ void setupLED() {
   FastLED.clear(true);
 }
 
+void turnOn() { 
+  fill_solid(leds, NUM_LEDS, CRGB::Amethyst);
+  FastLED.show();
+}
+
+void turnOff() { 
+  FastLED.clear(true);
+  FastLED.show();
+}
+
 

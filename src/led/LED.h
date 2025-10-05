@@ -21,4 +21,8 @@
 
 extern CRGB leds[NUM_LEDS];
 
-void setupLED(); 
+void setupLED();
+
+void turnOn();
+
+void turnOff();
