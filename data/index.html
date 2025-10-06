@@ -1,31 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script defer src="alpinejs@3.15.0.js"></script>
-  <title>ESP32 LED Controller</title>
+  <link rel="stylesheet" href="css/picocss@2.1.1.css">
+  <script defer src="js/alpinejs@3.15.0.js"></script>
+  <title>LED Controller</title>
 </head>
+<style>
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  nav ul {
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .theme-toggle {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+  }
+
+  pre {
+    background: var(--pico-muted-border-color);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+  }
+</style>
 
 <body>
-  <h1>ESP32 LED Controller</h1>
-  <h1>%DEVICE_NAME%</h1>
+  <data x-data="colorPick()">
+    <main class="container">
+      <nav>
+        <ul>
+          <li><strong>LED Controller</strong></li>
+        </ul>
+        <ul>
+          <li>
+            <button x-data @click="$store.theme.toggle()" x-text="$store.theme.isDark ? '🌞' : '🌙'"
+              aria-label="Toggle theme">
+            </button>
+          </li>
+        </ul>
+      </nav>
 
-  <div x-data="{ 
-      isOn: false,
-      toggleLED() { 
-        this.isOn = !this.isOn;
-        const state = this.isOn ? 'on' : 'off';
-        console.log(`LED is now ${state}`);
-        fetch(`/led?state=${state}`);
-      }
-  }">
-    <button @click="toggleLED()">
-      <span x-text="isOn ? 'Turn Off' : 'Turn On'"></span>
-    </button>
-    <p x-text="isOn ? 'LED is ON' : 'LED is OFF'"></p>
-  </div>
+      <article>
+        <h2>Control Panel</h2>
+        <p>Adjust LED settings below:</p>
+
+        <label for="powerSwitch">
+          <input name="opt-in" type="checkbox" role="switch" x-bind:checked="isOn" />
+          LED Power
+        </label>
+
+        <label for="colorPicker">LED Color</label>
+        <input type="color" id="colorPicker">
+
+        <label for="brightness">Brightness</label>
+        <input type="range" id="brightness" min="0" max="255">
+        <label for=" mode">Mode</label>
+        <select id="mode">
+          <option value="solid">Solid</option>
+          <option value="blink">Blink</option>
+          <option value="fade">Fade</option>
+          <option value="rainbow">Rainbow</option>
+        </select>
+
+        <button @onclick="applyColor()">Apply Settings</button>
+      </article>
+
+
+      <footer>
+        <small>Powered by ESP32 & PicoCSS</small>
+      </footer>
+    </main>
+  </data>
+
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('theme', {
+        // Default to dark theme
+        isDark: true,
+        toggle() {
+          console.log('Toggling dark theme', this.isDark);
+          this.isDark = !this.isDark;
+          document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
+        }
+      });
+    });
+  </script>
+  <script src="js/color-picker.js"></script>
 </body>
 
 </html>

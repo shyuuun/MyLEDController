@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/picocss@2.1.1.css">
+  <title>404 - Page Not Found</title>
+  <style>
+    h1 {
+      font-size: 4rem;
+      color: #ff5555;
+      margin: 0;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin: 10px 0 20px 0;
+    }
+
+    a {
+      color: #00bfff;
+      text-decoration: none;
+      border: 1px solid #00bfff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    a:hover {
+      background: #00bfff;
+      color: #0a0a0a;
+    }
+
+    .led {
+      width: 20px;
+      height: 20px;
+      background: #ff5555;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #ff5555;
+      margin-bottom: 15px;
+      animation: blink 1s infinite alternate;
+    }
+
+    @keyframes blink {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0.2;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <div class="led"></div>
+    <h1>404</h1>
+    <p>Oops! The LED path you're looking for doesn’t exist.</p>
+    <a href="/">Go Back to Home</a>
+  </main>
+</body>
+
+</html>
