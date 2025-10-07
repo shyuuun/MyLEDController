@@ -5,10 +5,10 @@
 #include "defines.h"
 
 
-void createAP(){ 
+void createAP() {
   bool isAPCreated = WiFi.softAP(DEFAULT_AP_WIFI, DEFAULT_AP_PASSWORD);
 
-  if(isAPCreated) {
+  if (isAPCreated) {
     leds[0] = CRGB::Green; // Set the first LED to green to indicate AP creation success
     FastLED.show(); // Update the LED state
   } else {
@@ -17,6 +17,6 @@ void createAP(){
   }
 }
 
-void setupWifi() { 
+void setupWifi() {
   // TODO : Implement WiFi setup logic here
 }

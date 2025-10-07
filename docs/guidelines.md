@@ -12,23 +12,22 @@ To maintain a consistent codebase, please follow these guidelines.
 ## Formatting
 
 -   **Indentation**: Use 2 spaces for indentation, not tabs.
--   **Braces**: Use the Allman style, where opening braces for namespaces, classes, and functions are on a new line.
+-   **Braces**: Use the K&R style, where opening braces for functions are on the same line.
 
     ```cpp
     // Good
-    void myFunction()
-    {
-        if (condition)
-        {
-            // ...
-        }
+    void myFunction() {
+      if (condition) {
+        // ...
+      }
     }
 
     // Bad
-    void myFunction(){
-        if(condition){
-            //...
-        }
+    void myFunction()
+    {
+      if(condition){
+        //...
+      }
     }
     ```
 

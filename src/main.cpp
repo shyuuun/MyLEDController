@@ -9,22 +9,21 @@
 void setup() {
   Serial.begin(115200);
   setupLED();
-  if(!LittleFS.begin()){
+  if (!LittleFS.begin()) {
     leds[0] = CRGB::Red;
     leds[1] = CRGB::Red;
     FastLED.show(); // Update the LED state
     return;
   }
-  createAP(); 
+  createAP();
   serverRoutes();
   server.begin(); // Start the server
 
 }
 
 void loop() {
-
-IPAddress IP = WiFi.softAPIP();
-Serial.print("AP IP address: ");
-Serial.println(IP);
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(IP);
   delay(1000);
 }

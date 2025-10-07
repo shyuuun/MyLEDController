@@ -11,6 +11,6 @@ function colorPick() {
       console.log("Brightness:", this.brightness);
       // Here you would typically send the settings to your backend or device
       }
-    },
-	};
-}
+    }
+	}
+

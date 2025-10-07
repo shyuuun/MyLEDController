@@ -4,9 +4,11 @@
 
 
 /**
- * @brief Create a WiFi Access Point (AP) with the default credentials. 
- * @return void 
+ * @brief Create a WiFi Access Point (AP) with the default credentials.
  */
 void createAP();
 
+/**
+ * @brief Setup WiFi connection and configuration.
+ */
 void setupWifi();

@@ -21,8 +21,17 @@
 
 extern CRGB leds[NUM_LEDS];
 
+/**
+ * @brief Initialize the LED strip with default settings.
+ */
 void setupLED();
 
+/**
+ * @brief Turn on all LEDs with a preset color.
+ */
 void turnOn();
 
+/**
+ * @brief Turn off all LEDs.
+ */
 void turnOff();
