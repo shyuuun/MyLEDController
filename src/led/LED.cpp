@@ -9,7 +9,7 @@ CRGB color = CRGB(80, 80, 80);
 
 CRGB leds[NUM_LEDS];
 
-void setupLED() { 
+void setupLED() {
   Serial.println("Setting up LEDs...");
   FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setBrightness(255);
@@ -20,7 +20,7 @@ void turnOn() {
   fill_solid(leds, NUM_LEDS, color);
 }
 
-void turnOff() { 
+void turnOff() {
   FastLED.clear(true);
 }
 

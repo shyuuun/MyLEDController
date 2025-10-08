@@ -25,13 +25,13 @@ String processor(const String& var) {
 
 }
 
-void serverRoutes() { 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+void serverRoutes() {
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     if (LittleFS.exists("/index.html")) {
-        request->send(LittleFS, "/index.html", "text/html", false, processor);
+      request->send(LittleFS, "/index.html", "text/html", false, processor);
     } else {
-        Serial.println("Could not find index.html");
-        request->send(404, "text/plain", "404: Not Found");
+      Serial.println("Could not find index.html");
+      request->send(404, "text/plain", "404: Not Found");
     }
   });
 
@@ -77,20 +77,20 @@ void serverRoutes() {
     request->send(200, "text/plain", "OK");
   });
 
-  server.onNotFound([](AsyncWebServerRequest *request){
+  server.onNotFound([](AsyncWebServerRequest *request) {
     String path = request->url();
     String contentType = "text/plain";
-    bool known_type = false;
+    bool knownType = false;
 
     if (path.endsWith(".css")) {
       contentType = "text/css";
-      known_type = true;
+      knownType = true;
     } else if (path.endsWith(".js")) {
       contentType = "application/javascript";
-      known_type = true;
+      knownType = true;
     }
 
-    if (known_type && LittleFS.exists(path)) {
+    if (knownType && LittleFS.exists(path)) {
       request->send(LittleFS, path, contentType);
     } else {
       Serial.printf("NOT_FOUND: %s\n", request->url().c_str());

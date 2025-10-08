@@ -5,26 +5,25 @@
 #include <led/LED.h>
 #include "wifi-manager/wifi-manager.h"
 #include <web-server/web-server.h>
+#include <error-codes/error-codes.h>
 
 void setup() {
   Serial.begin(115200);
   setupLED();
-  if(!LittleFS.begin()){
-    leds[0] = CRGB::Red;
-    leds[1] = CRGB::Red;
-    FastLED.show(); // Update the LED state
+
+  if (!LittleFS.begin()) {
+    showErrorCode(ERROR_FILESYSTEM_INIT);
     return;
   }
-  createAP(); 
-  serverRoutes();
-  server.begin(); // Start the server
 
+  createAP();
+  serverRoutes();
+  server.begin();
 }
 
 void loop() {
-
-IPAddress IP = WiFi.softAPIP();
-Serial.print("AP IP address: ");
-Serial.println(IP);
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(IP);
   delay(1000);
 }
