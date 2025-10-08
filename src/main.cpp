@@ -5,20 +5,20 @@
 #include <led/LED.h>
 #include "wifi-manager/wifi-manager.h"
 #include <web-server/web-server.h>
+#include <error-codes/error-codes.h>
 
 void setup() {
   Serial.begin(115200);
   setupLED();
+
   if (!LittleFS.begin()) {
-    leds[0] = CRGB::Red;
-    leds[1] = CRGB::Red;
-    FastLED.show(); // Update the LED state
+    showErrorCode(ERROR_FILESYSTEM_INIT);
     return;
   }
+
   createAP();
   serverRoutes();
-  server.begin(); // Start the server
-
+  server.begin();
 }
 
 void loop() {

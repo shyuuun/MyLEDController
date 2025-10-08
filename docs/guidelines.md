@@ -56,13 +56,11 @@ To maintain a consistent codebase, please follow these guidelines.
 
     ```cpp
     // File: led/LED.cpp
-    void setLedColor(int index, CRGB color)
-    {
-        // This check is necessary to prevent buffer overflows.
-        if (index >= 0 && index < NUM_LEDS)
-        {
-            leds[index] = color;
-        }
+    void setLedColor(int index, CRGB color) {
+      // This check is necessary to prevent buffer overflows.
+      if (index >= 0 && index < NUM_LEDS) {
+        leds[index] = color;
+      }
     }
     ```
 

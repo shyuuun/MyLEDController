@@ -1,19 +1,17 @@
-#include <FastLED.h> 
+#include <FastLED.h>
 #include <WiFi.h>
 #include "wifi-manager.h"
 #include "led/LED.h"
 #include "defines.h"
-
+#include "error-codes/error-codes.h"
 
 void createAP() {
   bool isAPCreated = WiFi.softAP(DEFAULT_AP_WIFI, DEFAULT_AP_PASSWORD);
 
   if (isAPCreated) {
-    leds[0] = CRGB::Green; // Set the first LED to green to indicate AP creation success
-    FastLED.show(); // Update the LED state
+    showSuccess();
   } else {
-    leds[0] = CRGB::Red; // Set the first LED to red to indicate AP creation failure
-    FastLED.show(); // Update the LED state
+    showErrorCode(ERROR_AP_CREATION);
   }
 }
 
