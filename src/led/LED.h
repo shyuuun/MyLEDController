@@ -16,8 +16,6 @@
 
 #define LED_TYPE WS2812B
 
-// Define the default brightness of the LEDs (0 to 255)
-#define DEFAULT_BRIGHTNESS 50
 
 extern CRGB leds[NUM_LEDS];
 
@@ -26,3 +24,7 @@ void setupLED();
 void turnOn();
 
 void turnOff();
+
+void setColor(uint8_t r, uint8_t g, uint8_t b);
+void setBrightness(uint8_t brightness);
+void updateLed(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t led_state);

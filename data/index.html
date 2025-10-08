@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/picocss@2.1.1.css">
   <script defer src="js/alpinejs@3.15.0.js"></script>
-  <title>LED Controller</title>
+  <title>%DEVICE_NAME%</title>
 </head>
 <style>
   header {
@@ -62,17 +62,17 @@
         </label>
 
         <label for="colorPicker">LED Color</label>
-        <input type="color" id="colorPicker">
+        <input type="color" id="colorPicker" value="%LED_COLOR%">
 
         <label for="brightness">Brightness</label>
-        <input type="range" id="brightness" min="0" max="255">
-        <label for=" mode">Mode</label>
+        <input type="range" x-model="brightness" id="brightness" min="0" max="255" value="%BRIGHTNESS%">
+        <!-- <label for="mode">Mode</label>
         <select id="mode">
           <option value="solid">Solid</option>
           <option value="blink">Blink</option>
           <option value="fade">Fade</option>
           <option value="rainbow">Rainbow</option>
-        </select>
+        </select> -->
 
         <button @onclick="applyColor()">Apply Settings</button>
       </article>
