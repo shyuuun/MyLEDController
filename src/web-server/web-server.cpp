@@ -13,18 +13,21 @@ String processor(const String& var) {
   } else if (var == "LED_STATUS") {
     // Here you would return the actual LED status
     return ledState ? "1" : "0"; // or "ON"
-  } else if (var == "BRIGHTNESS") {
-    // Here you would return the actual brightness level
-    return String(defaultBrightness); // Example brightness level
-  } else if (var == "LED_COLOR") {
-    // Return the actual LED color in hex format for HTML color input
-    char hexColor[8];
-    sprintf(hexColor, "#%02X%02X%02X", color.r, color.g, color.b);
-    return String(hexColor);
   } else if (var == "LED_COLOR_RGB") {
     // Return the actual LED color in R,G,B format for display
     return String(color.r) + "," + String(color.g) + "," + String(color.b);
-  } else { 
+  } else if ( var == "RED") { 
+    return String(color.r);
+  }
+  else if ( var == "BLUE") { 
+    return String(color.b);
+  }
+else if ( var == "GREEN") { 
+    return String(color.g);
+  }
+
+  
+  else { 
     return String();
   }
 
@@ -41,43 +44,30 @@ void serverRoutes() {
   });
 
   server.on("/led", HTTP_GET, [](AsyncWebServerRequest *request){
-    // if (request->hasParam("state")) {
-    //   state = request->getParam("state")->value();
-    //   if (state == "on") {
-    //     turnOn();
-    //   } else if (state == "off") {
-    //     turnOff();
-    //   }
-    // }
-    if(!request->hasParam("ledState") || !request->hasParam("brightness") || !request->hasParam("ledColor")){ 
+
+    // Validate if there is query params
+    if(!request->hasParam("ledState") || !request->hasParam("r") || !request->hasParam("g") || !request->hasParam("b")){ 
       request->send(400, "text/plain", "Missing params");
       return;
     }
 
-    String ledStateStr = request->getParam("ledState")->value();
-    String brightnessStr = request->getParam("brightness")->value();
-    String ledColorStr = request->getParam("ledColor")->value();
+    // TODO: Validate if the rgb is below 0 and exceeds to 255 range
 
-    // Convert brightness string to uint8_t
-    uint8_t brightnessVal = (uint8_t)brightnessStr.toInt();
+
+    uint8_t ledState = request->getParam("ledState")->value().toInt();
+    uint8_t red =  request->getParam("r")->value().toInt();
+    uint8_t blue =  request->getParam("b")->value().toInt();
+    uint8_t green = request->getParam("g")->value().toInt();
 
     // Convert ledState string ("1" or "0") to uint8_t
-    uint8_t led_state = (uint8_t)ledStateStr.toInt();
 
-    // Parse the hex color string (e.g., "#ff0000")
-    long colorValue = strtol(ledColorStr.c_str() + 1, NULL, 16);
-    uint8_t r = (colorValue >> 16) & 0xFF;
-    uint8_t g = (colorValue >> 8) & 0xFF;
-    uint8_t b = colorValue & 0xFF;
-
-    Serial.println(r);
-    Serial.println(g);
-    Serial.println(b);
-    Serial.println(brightnessVal);
-    Serial.println(led_state);
+    Serial.println(red);
+    Serial.println(blue);
+    Serial.println(green);
+    Serial.println(ledState);
 
     // Call the updateLed function with the parsed values
-    updateLed(r, g, b, brightnessVal, led_state);
+    updateLed(red, green, blue, ledState);
 
     request->send(200, "text/plain", "OK");
   });

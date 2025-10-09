@@ -7,7 +7,8 @@ const int8_t MAX_BRIGHTNESS = 255;
 
 boolean ledState = false; // Default LED state (off)
 
-CRGB color = CRGB(80, 80, 80); 
+// NOTE: As of now it is white
+CRGB color = CRGB(100, 100, 100); 
 
 CRGB leds[NUM_LEDS];
 
@@ -39,7 +40,7 @@ void setBrightness(uint8_t brightness){
   FastLED.setBrightness(brightness);
 }
 
-void updateLed(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t led_state){
+void updateLed(uint8_t r, uint8_t g, uint8_t b, uint8_t led_state){
 
   if(led_state == 1) { 
     ledState = true;
@@ -50,7 +51,6 @@ void updateLed(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t led_
  }
 
   setColor(r,g,b);
-  setBrightness(brightness);
 
   FastLED.show();
 }
