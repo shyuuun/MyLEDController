@@ -12,13 +12,18 @@ String processor(const String& var) {
     return "My ESP32 Web Thing";
   } else if (var == "LED_STATUS") {
     // Here you would return the actual LED status
-    return "OFF"; // or "ON"
+    return ledState ? "1" : "0"; // or "ON"
   } else if (var == "BRIGHTNESS") {
     // Here you would return the actual brightness level
-    return "50"; // Example brightness level
+    return String(defaultBrightness); // Example brightness level
   } else if (var == "LED_COLOR") {
-    // Here you would return the actual LED color
-    return "255,0,0"; // Example color (red)
+    // Return the actual LED color in hex format for HTML color input
+    char hexColor[8];
+    sprintf(hexColor, "#%02X%02X%02X", color.r, color.g, color.b);
+    return String(hexColor);
+  } else if (var == "LED_COLOR_RGB") {
+    // Return the actual LED color in R,G,B format for display
+    return String(color.r) + "," + String(color.g) + "," + String(color.b);
   } else { 
     return String();
   }

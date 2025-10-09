@@ -18,6 +18,9 @@
 
 
 extern CRGB leds[NUM_LEDS];
+extern int8_t defaultBrightness;
+extern boolean ledState;
+extern CRGB color;
 
 /**
  * @brief Initialize the LED strip with default settings.

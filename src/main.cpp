@@ -19,6 +19,8 @@ void setup() {
   createAP();
   serverRoutes();
   server.begin();
+
+  showSuccess();
 }
 
 void loop() {

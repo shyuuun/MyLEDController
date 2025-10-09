@@ -57,15 +57,15 @@
         <p>Adjust LED settings below:</p>
 
         <label for="powerSwitch">
-          <input name="opt-in" type="checkbox" role="switch" x-bind:checked="isOn" />
+          <input name="opt-in" type="checkbox" role="switch" x-model="isOn" @change="applyColor()" />
           LED Power
         </label>
 
         <label for="colorPicker">LED Color</label>
-        <input type="color" id="colorPicker" value="%LED_COLOR%">
+        <input type="color" id="colorPicker" x-model="color" value="color">
 
         <label for="brightness">Brightness</label>
-        <input type="range" x-model="brightness" id="brightness" min="0" max="255" value="%BRIGHTNESS%">
+        <input type="range" x-model="brightness" id="brightness" min="0" max="255" value="brightness">
         <!-- <label for="mode">Mode</label>
         <select id="mode">
           <option value="solid">Solid</option>
@@ -74,8 +74,18 @@
           <option value="rainbow">Rainbow</option>
         </select> -->
 
-        <button @onclick="applyColor()">Apply Settings</button>
+        <button @click="applyColor()">Apply Settings</button>
       </article>
+      <section>
+        <h2>LED Status</h2>
+        <p>Current LED settings:</p>
+        <pre id="status">
+          Color (RGB): %LED_COLOR_RGB%<br>
+          Color (Hex): %LED_COLOR%<br>
+          Brightness: %BRIGHTNESS%<br>
+          Power: %LED_STATUS%
+        </pre>
+      </section>
 
 
       <footer>
@@ -99,6 +109,11 @@
     });
   </script>
   <script src="js/color-picker.js"></script>
+  <script>
+    window.isOn = "%LED_STATUS%" == 1 || false;
+    window.ledColor = "%LED_COLOR%" || "#ff0000";
+    window.brightness = "%BRIGHTNESS%" || 0;
+  </script>
 </body>
 
 </html>

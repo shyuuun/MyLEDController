@@ -5,6 +5,8 @@
 int8_t defaultBrightness  = 50;
 const int8_t MAX_BRIGHTNESS = 255;
 
+boolean ledState = false; // Default LED state (off)
+
 CRGB color = CRGB(80, 80, 80); 
 
 CRGB leds[NUM_LEDS];
@@ -12,16 +14,17 @@ CRGB leds[NUM_LEDS];
 void setupLED() {
   Serial.println("Setting up LEDs...");
   FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  FastLED.setBrightness(255);
-  FastLED.clear(true);
+  turnOff();
 }
 
 void turnOn() { 
+  ledState = true;
   fill_solid(leds, NUM_LEDS, color);
 }
 
 void turnOff() {
-  FastLED.clear(true);
+  ledState = false;
+  fill_solid(leds, NUM_LEDS, CRGB::Black); // Use Black instead of clear
 }
 
 void setColor(uint8_t r, uint8_t g, uint8_t b) { 
@@ -37,15 +40,18 @@ void setBrightness(uint8_t brightness){
 }
 
 void updateLed(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t led_state){
-  FastLED.clear(true);
+
+  if(led_state == 1) { 
+    ledState = true;
+    fill_solid(leds, NUM_LEDS, color);
+  } else { 
+    ledState = false;
+    fill_solid(leds, NUM_LEDS, CRGB::Black);
+ }
+
   setColor(r,g,b);
   setBrightness(brightness);
-  fill_solid(leds, NUM_LEDS, color);
-  if(led_state == 1) { 
-    turnOn();
-  } else { 
-    turnOff();
-  }
+
   FastLED.show();
 }
 
