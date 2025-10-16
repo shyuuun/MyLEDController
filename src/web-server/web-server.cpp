@@ -59,7 +59,6 @@ void serverRoutes() {
     uint8_t blue =  request->getParam("b")->value().toInt();
     uint8_t green = request->getParam("g")->value().toInt();
 
-    // Convert ledState string ("1" or "0") to uint8_t
 
     Serial.println(red);
     Serial.println(blue);
