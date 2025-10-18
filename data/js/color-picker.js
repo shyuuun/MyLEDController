@@ -13,7 +13,7 @@ function colorPick() {
 
 			this.debounceTimer = setTimeout(() => {
 				this.sendUpdate();
-			}, 250);
+			}, 100);
 
 			console.log("Changed the color!");
 		},
