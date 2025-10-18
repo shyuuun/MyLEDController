@@ -5,7 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/picocss@2.1.1.css">
+
   <script defer src="js/alpinejs@3.15.0.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/color-picker.js"></script>
   <title>%DEVICE_NAME%</title>
 </head>
 <style>
@@ -37,7 +40,31 @@
 </style>
 
 <body>
-  <data x-data="colorPick()">
+  <!--  Hydrate data FIRST before any Alpine code runs -->
+  <script>
+    window.isOn = "%LED_STATUS%" === "1";
+    window.red = parseInt("%RED%") || 0;
+    window.green = parseInt("%GREEN%") || 0;
+    window.blue = parseInt("%BLUE%") || 0;
+  </script>
+
+  <!-- Initialize Alpine stores -->
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('theme', {
+        isDark: true,
+        toggle() {
+          console.log('Toggling dark theme', this.isDark);
+          this.isDark = !this.isDark;
+          document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
+        }
+      });
+    });
+  </script>
+
+  <!-- 4. Load Alpine.js LAST -->
+
+  <div x-data="colorPick()">
     <main class="container">
       <nav>
         <ul>
@@ -45,8 +72,7 @@
         </ul>
         <ul>
           <li>
-            <button x-data @click="$store.theme.toggle()" x-text="$store.theme.isDark ? '🌞' : '🌙'"
-              aria-label="Toggle theme">
+            <button @click="$store.theme.toggle()" x-text="$store.theme.isDark ? '🌞' : '🌙'" aria-label="Toggle theme">
             </button>
           </li>
         </ul>
@@ -62,22 +88,20 @@
         </label>
 
         <label for="colorPicker">Color Picker</label>
-        <div x-data="{ r: window.red, g: window.green, b: window.blue }">
+        <div>
           <div id="colorPicker" style="width: 100%; height: 240px; padding: 0; border: none; margin-bottom: 1rem;"
             x-bind:style="{
               background: `rgb(${r}, ${g}, ${b})`
             }"></div>
 
-          <label for="R">Red
-            <input type="range" name="R" id="R" min="0" max="255" x-model="r">
+          <label for="R">Red: <span x-text="r"></span>
+            <input type="range" name="R" id="R" min="0" max="255" x-model="r" @input="applyColor()">
           </label>
-          <label for="G">
-            Green
-            <input type="range" name="G" id="G" min="0" max="255" x-model="g">
+          <label for="G">Green: <span x-text="g"></span>
+            <input type="range" name="G" id="G" min="0" max="255" x-model="g" @input="applyColor()">
           </label>
-          <label for="B">
-            Blue
-            <input type="range" name="B" id="B" min="0" max="255" x-model="b">
+          <label for="B">Blue: <span x-text="b"></span>
+            <input type="range" name="B" id="B" min="0" max="255" x-model="b" @input="applyColor()">
           </label>
         </div>
 
@@ -97,30 +121,8 @@
         <small>Powered by ESP32 & PicoCSS</small>
       </footer>
     </main>
-  </data>
+  </div>
 
-  <script src="js/config.js"></script>
-  <script src="js/color-picker.js"></script>
-  <script>
-    document.addEventListener('alpine:init', () => {
-      Alpine.store('theme', {
-        // Default to dark theme
-        isDark: true,
-        toggle() {
-          console.log('Toggling dark theme', this.isDark);
-          this.isDark = !this.isDark;
-          document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
-        }
-      });
-    });
-  </script>
-  <script>
-    // Hydrate the data before we use it on alpine 
-    window.isOn = "%LED_STATUS%" == 1 || false;
-    window.red = "%RED%" || 0;
-    window.green = "%GREEN%" || 0;
-    window.blue = "%BLUE%" || 0;
-  </script>
 </body>
 
 </html>
