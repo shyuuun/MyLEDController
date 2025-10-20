@@ -83,7 +83,7 @@
         <p>Adjust LED settings below:</p>
 
         <label for="powerSwitch">
-          <input name="opt-in" type="checkbox" role="switch" x-model="isOn" @change="applyColor()" />
+          <input name="opt-in" type="checkbox" role="switch" x-model="isOn" @change="toggleLed()" />
           LED Power
         </label>
 
@@ -95,13 +95,16 @@
             }"></div>
 
           <label for="R">Red: <span x-text="r"></span>
-            <input type="range" name="R" id="R" min="0" max="255" x-model="r" @input="applyColor()">
+            <input type="range" name="R" id="R" min="0" max="255" x-model="r" @input="applyColor()"
+              x-bind:disabled="!isOn">
           </label>
           <label for="G">Green: <span x-text="g"></span>
-            <input type="range" name="G" id="G" min="0" max="255" x-model="g" @input="applyColor()">
+            <input type="range" name="G" id="G" min="0" max="255" x-model="g" @input="applyColor()"
+              x-bind:disabled="!isOn">
           </label>
           <label for="B">Blue: <span x-text="b"></span>
-            <input type="range" name="B" id="B" min="0" max="255" x-model="b" @input="applyColor()">
+            <input type="range" name="B" id="B" min="0" max="255" x-model="b" @input="applyColor()"
+              x-bind:disabled="!isOn">
           </label>
         </div>
 

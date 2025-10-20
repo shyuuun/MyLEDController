@@ -18,11 +18,11 @@ This document outlines planned features for the LED Controller project.
 -   [ ] Color picker for custom colors
 -   [ ] Brightness slider (0-255)
 -   [ ] Speed control for effects
--   [ ] Power on/off toggle
+-   [x] Power on/off toggle
 
 #### LED Effects
 
--   [ ] Static color mode
+-   [x] Static color mode
 -   [ ] Rainbow cycle
 -   [ ] Color fade/breathing
 -   [ ] Theater chase
@@ -83,7 +83,7 @@ This document outlines planned features for the LED Controller project.
 ### Network Features
 
 -   [ ] mDNS support (discover device as ledcontroller.local)
--   [ ] Station mode (connect to existing WiFi)
+-   [x] Station mode (connect to existing WiFi)
 
 ## Future Considerations
 

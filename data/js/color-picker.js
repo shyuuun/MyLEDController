@@ -6,16 +6,18 @@ function colorPick() {
 		b: window.blue,
 		debounceTimer: null,
 
+		async toggleLed() {
+			await this.sendUpdate();
+			console.log("Toggled LED power:", this.isOn ? "On" : "Off");
+		},
+
 		async applyColor() {
-			if (this.debounceTimer) {
-				clearTimeout(this.debounceTimer);
-			}
+			if (this.debounceTimer) clearTimeout(this.debounceTimer);
 
-			this.debounceTimer = setTimeout(() => {
-				this.sendUpdate();
-			}, 100);
-
-			console.log("Changed the color!");
+			this.debounceTimer = setTimeout(async () => {
+				await this.sendUpdate();
+				console.log("Changed the color!");
+			}, 50);
 		},
 
 		async sendUpdate() {

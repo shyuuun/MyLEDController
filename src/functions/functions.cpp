@@ -1,8 +1,8 @@
 #include "functions.h"
 
-// Global variable - default to AP mode (false)
+// Default to Station mode (connects to existing WiFi)
 bool isStationMode = true;
 
-bool isWifiStationMode() { 
+bool isWifiStationMode() {
   return isStationMode;
 }

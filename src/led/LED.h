@@ -36,6 +36,25 @@ void turnOn();
  */
 void turnOff();
 
+/**
+ * @brief Set the color for all LEDs.
+ * @param r Red component (0-255).
+ * @param g Green component (0-255).
+ * @param b Blue component (0-255).
+ */
 void setColor(uint8_t r, uint8_t g, uint8_t b);
+
+/**
+ * @brief Set the global brightness for all LEDs.
+ * @param brightness Brightness level (0-255).
+ */
 void setBrightness(uint8_t brightness);
+
+/**
+ * @brief Update LED state and color in one operation.
+ * @param r Red component (0-255).
+ * @param g Green component (0-255).
+ * @param b Blue component (0-255).
+ * @param led_state LED power state (1 = on, 0 = off).
+ */
 void updateLed(uint8_t r, uint8_t g, uint8_t b, uint8_t led_state);

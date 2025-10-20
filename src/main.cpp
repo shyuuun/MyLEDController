@@ -11,13 +11,12 @@
 void setup() {
   Serial.begin(115200);
   setupLED();
-
   if (!LittleFS.begin()) {
     showErrorCode(ERROR_FILESYSTEM_INIT);
     return;
   }
 
-  if(isStationMode) {
+  if (isStationMode) {
     setupWifi();
   } else {
     createAP();
@@ -30,17 +29,20 @@ void setup() {
 }
 
 void loop() {
-  if(isStationMode) { 
-    IPAddress IP = WiFi.localIP();
-    Serial.print("Station IP address: ");
-    Serial.println(IP);
-    Serial.print("Station MAC address: ");
-    Serial.println(WiFi.macAddress());
-  } else { 
+  static unsigned long lastPrint = 0;
 
-    IPAddress IP = WiFi.softAPIP();
-    Serial.print("AP IP address: ");
-    Serial.println(IP);
+  // Periodic status update to avoid flooding serial output
+  if (millis() - lastPrint > 10000) {
+    if (isStationMode) {
+      Serial.print("Station IP: ");
+      Serial.println(WiFi.localIP());
+    } else {
+      Serial.print("AP IP: ");
+      Serial.println(WiFi.softAPIP());
+    }
+    lastPrint = millis();
   }
-  delay(1000);
+
+  // Prevent watchdog timer resets on ESP32
+  delay(10);
 }
