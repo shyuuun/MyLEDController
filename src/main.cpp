@@ -3,10 +3,14 @@
 #include <FS.h>
 #include <LittleFS.h>
 #include <led/LED.h>
+#include <ESPmDNS.h>
+#include <defines.h>
 #include "wifi-manager/wifi-manager.h"
 #include <web-server/web-server.h>
 #include <error-codes/error-codes.h>
 #include <functions/functions.h>
+
+char* mDNSName = (char*)"myled";
 
 void setup() {
   Serial.begin(115200);
@@ -20,6 +24,13 @@ void setup() {
     setupWifi();
   } else {
     createAP();
+  }
+
+  if(!MDNS.begin(mDNSName)) {
+    Serial.println("Error setting up MDNS responder!");
+    while(1) {
+      delay(1000);
+    }
   }
 
   serverRoutes();

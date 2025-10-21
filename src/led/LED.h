@@ -44,11 +44,6 @@ void turnOff();
  */
 void setColor(uint8_t r, uint8_t g, uint8_t b);
 
-/**
- * @brief Set the global brightness for all LEDs.
- * @param brightness Brightness level (0-255).
- */
-void setBrightness(uint8_t brightness);
 
 /**
  * @brief Update LED state and color in one operation.

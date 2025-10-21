@@ -33,15 +33,6 @@ void setColor(uint8_t r, uint8_t g, uint8_t b) {
   color = CRGB(r, g, b);
 }
 
-void setBrightness(uint8_t brightness) {
-  // Clamp brightness to valid range to prevent overflow
-  if (brightness > MAX_BRIGHTNESS) {
-    brightness = MAX_BRIGHTNESS;
-  }
-
-  FastLED.setBrightness(brightness);
-}
-
 void updateLed(uint8_t r, uint8_t g, uint8_t b, uint8_t led_state) {
   // Update color first to ensure correct color is used when turning on
   setColor(r, g, b);
@@ -53,7 +44,6 @@ void updateLed(uint8_t r, uint8_t g, uint8_t b, uint8_t led_state) {
     ledState = false;
     fill_solid(leds, NUM_LEDS, CRGB::Black);
   }
-
 
   FastLED.show();
 }

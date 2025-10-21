@@ -82,7 +82,7 @@ This document outlines planned features for the LED Controller project.
 
 ### Network Features
 
--   [ ] mDNS support (discover device as ledcontroller.local)
+-   [x] mDNS support (discover device as ledcontroller.local)
 -   [x] Station mode (connect to existing WiFi)
 
 ## Future Considerations
