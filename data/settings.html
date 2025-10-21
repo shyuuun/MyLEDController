@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/picocss@2.1.1.css">
+
+  <script defer src="js/alpinejs@3.15.0.js"></script>
+  <title>%DEVICE_NAME%</title>
+</head>
+<style>
+  nav ul {
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+  }
+</style>
+
+<body>
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('theme', {
+        isDark: true,
+        toggle() {
+          console.log('Toggling dark theme', this.isDark);
+          this.isDark = !this.isDark;
+          document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
+        }
+      });
+    });
+  </script>
+
+  <data x-data>
+    <main class="container">
+      <nav>
+        <ul>
+          <li><strong>%DEVICE_NAME%</strong></li>
+        </ul>
+        <ul>
+          <li>
+            <button @click="$store.theme.toggle()" x-text="$store.theme.isDark ? '🌞' : '🌙'" aria-label="Toggle theme">
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <article>
+        <h2>Settings</h2>
+        <p>Adjust your device settings below:</p>
+
+        TODO: add settings form here
+        TODO: add option to select GPIO pin
+        TODO: add option to set default LED color
+        TODO: add option to enable/disable LED on boot
+        TODO: add option to configure WiFi settings
+        TODO: add option to set device name
+        TODO: add option to update firmware
+
+
+      </article>
+
+
+      <footer>
+        <small>Powered by ESP32 & PicoCSS</small>
+      </footer>
+    </main>
+  </data>
+</body>
+
+</html>

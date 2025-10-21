@@ -25,13 +25,6 @@
     gap: 1rem;
   }
 
-  .theme-toggle {
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-size: 1.2rem;
-  }
-
   pre {
     background: var(--pico-muted-border-color);
     padding: 0.75rem;
@@ -82,9 +75,7 @@
     });
   </script>
 
-  <!-- 4. Load Alpine.js LAST -->
-
-  <div x-data="colorPick()">
+  <data x-data="colorPick()">
     <main class="container">
       <nav>
         <ul>
@@ -163,7 +154,7 @@
         <small>Powered by ESP32 & PicoCSS</small>
       </footer>
     </main>
-  </div>
+  </data>
 
 </body>
 

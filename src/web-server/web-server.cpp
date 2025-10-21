@@ -38,6 +38,15 @@ void serverRoutes() {
     }
   });
 
+  server.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request) {
+    if (LittleFS.exists("/settings.html")) {
+      request->send(LittleFS, "/settings.html", "text/html", false, processor);
+    } else {
+      Serial.println("Could not find settings.html");
+      request->send(HTTP_NOT_FOUND, "text/plain", "404: Not Found");
+    }
+  });
+
   server.on("/led", HTTP_GET, [](AsyncWebServerRequest *request) {
     // Validate required query parameters
     if (!request->hasParam("ledState") || !request->hasParam("r") || !request->hasParam("g") || !request->hasParam("b")) {
