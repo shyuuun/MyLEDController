@@ -37,6 +37,26 @@
     padding: 0.75rem;
     border-radius: 0.5rem;
   }
+
+  .color-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .color-box {
+    width: 64px;
+    height: 64px;
+    border: 3px solid var(--pico-muted-border-color);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .color-box:hover {
+    transform: translate(-4px, -4px);
+    border-color: var(--pico-accent-color);
+    cursor: pointer;
+  }
 </style>
 
 <body>
@@ -68,7 +88,7 @@
     <main class="container">
       <nav>
         <ul>
-          <li><strong>LED Controller</strong></li>
+          <li><strong>%DEVICE_NAME%</strong></li>
         </ul>
         <ul>
           <li>
@@ -95,17 +115,36 @@
             }"></div>
 
           <label for="R">Red: <span x-text="r"></span>
-            <input type="range" name="R" id="R" min="0" max="255" x-model="r" @input="applyColor()"
+            <input type="range" name="R" id="R" min="0" max="255" x-model="r" @input="handleSliderColorChange()"
               x-bind:disabled="!isOn">
           </label>
           <label for="G">Green: <span x-text="g"></span>
-            <input type="range" name="G" id="G" min="0" max="255" x-model="g" @input="applyColor()"
+            <input type="range" name="G" id="G" min="0" max="255" x-model="g" @input="handleSliderColorChange()"
               x-bind:disabled="!isOn">
           </label>
           <label for="B">Blue: <span x-text="b"></span>
-            <input type="range" name="B" id="B" min="0" max="255" x-model="b" @input="applyColor()"
-              x-bind:disabled="!isOn">
+            <input type="range" name="B" id="B" min="0" max="255" x-model="b" @input="handleSliderColorChange()"
+              x-bind:disabled=" !isOn">
           </label>
+        </div>
+
+        <div class="color-boxes">
+          <button @click="handleButtonColorChange(255, 100, 229)" class="color-box"
+            style="background: rgb(255, 100, 229);"></button>
+          <button @click="handleButtonColorChange(153, 19, 209)" class="color-box"
+            style="background: rgb(153, 19, 209);"></button>
+          <button @click="handleButtonColorChange(101, 200, 244)" class="color-box"
+            style="background: rgb(101, 200, 244);"></button>
+          <button @click="handleButtonColorChange(238, 100, 121)" class="color-box"
+            style="background: rgb(238, 100, 121);"></button>
+          <button @click="handleButtonColorChange(102, 45, 204)" class="color-box"
+            style="background: rgb(102, 45, 204);"></button>
+          <button @click="handleButtonColorChange(76, 224, 145)" class="color-box"
+            style="background: rgb(76, 224, 145);"></button>
+          <button @click="handleButtonColorChange(255, 195, 66)" class="color-box"
+            style="background: rgb(255, 195, 66);"></button>
+          <button @click="handleButtonColorChange(31, 178, 243)" class="color-box"
+            style="background: rgb(31, 178, 243);"></button>
         </div>
 
 

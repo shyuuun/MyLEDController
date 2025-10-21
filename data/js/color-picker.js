@@ -11,13 +11,21 @@ function colorPick() {
 			console.log("Toggled LED power:", this.isOn ? "On" : "Off");
 		},
 
-		async applyColor() {
+		async handleSliderColorChange() {
 			if (this.debounceTimer) clearTimeout(this.debounceTimer);
 
 			this.debounceTimer = setTimeout(async () => {
 				await this.sendUpdate();
 				console.log("Changed the color!");
 			}, 50);
+		},
+
+		async handleButtonColorChange(r, g, b) {
+			this.r = r;
+			this.g = g;
+			this.b = b;
+			await this.sendUpdate();
+			console.log("Changed the color!");
 		},
 
 		async sendUpdate() {
