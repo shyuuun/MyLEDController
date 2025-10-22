@@ -9,7 +9,7 @@
   <script defer src="js/alpinejs@3.15.0.js"></script>
   <script src="js/config.js"></script>
   <script src="js/color-picker.js"></script>
-  <title>%DEVICE_NAME%</title>
+  <title>&DEVICE_NAME&</title>
 </head>
 <style>
   header {
@@ -29,6 +29,14 @@
     background: var(--pico-muted-border-color);
     padding: 0.75rem;
     border-radius: 0.5rem;
+  }
+
+  .preview-box {
+    width: 100%;
+    height: 240px;
+    padding: 0;
+    border: none;
+    margin-bottom: 1rem;
   }
 
   .color-boxes {
@@ -55,10 +63,10 @@
 <body>
   <!--  Hydrate data FIRST before any Alpine code runs -->
   <script>
-    window.isOn = "%LED_STATUS%" === "1";
-    window.red = parseInt("%RED%") || 0;
-    window.green = parseInt("%GREEN%") || 0;
-    window.blue = parseInt("%BLUE%") || 0;
+    window.isOn = "&LED_STATUS&" === "1";
+    window.hue = parseInt("&HUE&") || 0;
+    window.saturation = parseInt("&SATURATE&") || 0;
+    window.lightness = parseInt("&LIGHT&") || 0;
   </script>
 
   <!-- Initialize Alpine stores -->
@@ -79,7 +87,7 @@
     <main class="container">
       <nav>
         <ul>
-          <li><strong>%DEVICE_NAME%</strong></li>
+          <li><strong>&DEVICE_NAME&</strong></li>
         </ul>
         <ul>
           <li>
@@ -100,43 +108,40 @@
 
         <label for="colorPicker">Color Picker</label>
         <div>
-          <div id="colorPicker" style="width: 100%; height: 240px; padding: 0; border: none; margin-bottom: 1rem;"
-            x-bind:style="{
-              background: `rgb(${r}, ${g}, ${b})`
-            }"></div>
+          <div id="colorPicker" class="preview-box" x-bind:style="`background-color: ${hsvToRgb(h, s, l)}`"></div>
 
-          <label for="R">Red: <span x-text="r"></span>
-            <input type="range" name="R" id="R" min="0" max="255" x-model="r" @input="handleSliderColorChange()"
+          <label for="H">Hue: <span x-text="h"></span>
+            <input type="range" name="H" id="H" min="0" max="360" x-model="h" @input="handleSliderColorChange()"
               x-bind:disabled="!isOn">
           </label>
-          <label for="G">Green: <span x-text="g"></span>
-            <input type="range" name="G" id="G" min="0" max="255" x-model="g" @input="handleSliderColorChange()"
+          <label for="S">Saturation: <span x-text="s"></span>
+            <input type="range" name="S" id="S" min="0" max="100" x-model="s" @input="handleSliderColorChange()"
               x-bind:disabled="!isOn">
           </label>
-          <label for="B">Blue: <span x-text="b"></span>
-            <input type="range" name="B" id="B" min="0" max="255" x-model="b" @input="handleSliderColorChange()"
+          <label for="L">Lightness: <span x-text="l"></span>
+            <input type="range" name="L" id="L" min="0" max="100" x-model="l" @input="handleSliderColorChange()"
               x-bind:disabled=" !isOn">
           </label>
         </div>
 
-        <div class="color-boxes">
-          <button @click="handleButtonColorChange(255, 100, 229)" class="color-box"
+        <fieldset class="color-boxes" x-bind:disabled="!isOn">
+          <button @click="handleButtonColorChange(310, 61, 100)" class="color-box"
             style="background: rgb(255, 100, 229);"></button>
-          <button @click="handleButtonColorChange(153, 19, 209)" class="color-box"
+          <button @click="handleButtonColorChange(273, 91, 82)" class="color-box"
             style="background: rgb(153, 19, 209);"></button>
-          <button @click="handleButtonColorChange(101, 200, 244)" class="color-box"
+          <button @click="handleButtonColorChange(203, 59, 96)" class="color-box"
             style="background: rgb(101, 200, 244);"></button>
-          <button @click="handleButtonColorChange(238, 100, 121)" class="color-box"
+          <button @click="handleButtonColorChange(351, 58, 93)" class="color-box"
             style="background: rgb(238, 100, 121);"></button>
-          <button @click="handleButtonColorChange(102, 45, 204)" class="color-box"
+          <button @click="handleButtonColorChange(253, 78, 80)" class="color-box"
             style="background: rgb(102, 45, 204);"></button>
-          <button @click="handleButtonColorChange(76, 224, 145)" class="color-box"
+          <button @click="handleButtonColorChange(153, 66, 88)" class="color-box"
             style="background: rgb(76, 224, 145);"></button>
-          <button @click="handleButtonColorChange(255, 195, 66)" class="color-box"
+          <button @click="handleButtonColorChange(41, 74, 100)" class="color-box"
             style="background: rgb(255, 195, 66);"></button>
-          <button @click="handleButtonColorChange(31, 178, 243)" class="color-box"
+          <button @click="handleButtonColorChange(197, 87, 95)" class="color-box"
             style="background: rgb(31, 178, 243);"></button>
-        </div>
+        </fieldset>
 
 
         <!-- <label for="mode">Mode</label>

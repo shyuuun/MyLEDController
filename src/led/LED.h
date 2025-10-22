@@ -19,7 +19,7 @@
 
 extern CRGB leds[NUM_LEDS];
 extern boolean ledState;
-extern CRGB color;
+extern CHSV color;
 
 /**
  * @brief Initialize the LED strip with default settings.
@@ -37,19 +37,19 @@ void turnOn();
 void turnOff();
 
 /**
- * @brief Set the color for all LEDs.
- * @param r Red component (0-255).
- * @param g Green component (0-255).
- * @param b Blue component (0-255).
+ * @brief Set the color in HSL format for all LEDs.
+ * @param hue (0-255).
+ * @param saturation (0-255).
+ * @param lightness (0-255).
  */
-void setColor(uint8_t r, uint8_t g, uint8_t b);
+void setColor(uint8_t hue, uint8_t saturation, uint8_t lightness);
 
 
 /**
  * @brief Update LED state and color in one operation.
- * @param r Red component (0-255).
- * @param g Green component (0-255).
- * @param b Blue component (0-255).
+ * @param h Hue (0-255)
+ * @param s Saturation (0-255)
+ * @param l Lightness (0-255) 
  * @param led_state LED power state (1 = on, 0 = off).
  */
-void updateLed(uint8_t r, uint8_t g, uint8_t b, uint8_t led_state);
+void updateLed(uint8_t h, uint8_t s, uint8_t l, uint8_t led_state);

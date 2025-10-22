@@ -10,3 +10,7 @@ extern bool isStationMode;
  * @return True if in Station mode, false if in AP mode.
  */
 bool isWifiStationMode();
+
+
+int normalizeHslForWeb(int value, int max);
+

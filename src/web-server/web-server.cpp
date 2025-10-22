@@ -1,23 +1,21 @@
 #include <web-server/web-server.h>
 #include <defines.h>
 #include <led/LED.h>
+#include "functions/functions.h"
 
 AsyncWebServer server(80);
 
-// TODO: if there is another processor function, consider renaming this one to avoid confusion
-String processor(const String& var) {
+String indexProcessor(const String& var) {
   if (var == "DEVICE_NAME") {
-    return "My ESP32 Web Thing";
+    return "ESP32 LED Controller";
   } else if (var == "LED_STATUS") {
     return ledState ? "1" : "0";
-  } else if (var == "LED_COLOR_RGB") {
-    return String(color.r) + "," + String(color.g) + "," + String(color.b);
-  } else if (var == "RED") {
-    return String(color.r);
-  } else if (var == "BLUE") {
-    return String(color.b);
-  } else if (var == "GREEN") {
-    return String(color.g);
+  } else if (var == "HUE") {
+    return String(normalizeHslForWeb(color.hue, 360));
+  } else if (var == "SATURATE") {
+    return String(normalizeHslForWeb(color.sat, 100));
+  } else if (var == "LIGHT") {
+    return String(normalizeHslForWeb(color.value, 100));
   } else {
     return String();
   }
@@ -31,7 +29,7 @@ void serverRoutes() {
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     if (LittleFS.exists("/index.html")) {
-      request->send(LittleFS, "/index.html", "text/html", false, processor);
+      request->send(LittleFS, "/index.html", "text/html", false, indexProcessor);
     } else {
       Serial.println("Could not find index.html");
       request->send(HTTP_NOT_FOUND, "text/plain", "404: Not Found");
@@ -40,7 +38,7 @@ void serverRoutes() {
 
   server.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request) {
     if (LittleFS.exists("/settings.html")) {
-      request->send(LittleFS, "/settings.html", "text/html", false, processor);
+      request->send(LittleFS, "/settings.html", "text/html", false, indexProcessor);
     } else {
       Serial.println("Could not find settings.html");
       request->send(HTTP_NOT_FOUND, "text/plain", "404: Not Found");
@@ -49,23 +47,23 @@ void serverRoutes() {
 
   server.on("/led", HTTP_GET, [](AsyncWebServerRequest *request) {
     // Validate required query parameters
-    if (!request->hasParam("ledState") || !request->hasParam("r") || !request->hasParam("g") || !request->hasParam("b")) {
+    if (!request->hasParam("ledState") || !request->hasParam("h") || !request->hasParam("s") || !request->hasParam("l")) {
       request->send(HTTP_BAD_REQUEST, "text/plain", "Missing params");
       return;
     }
 
     uint8_t ledState = request->getParam("ledState")->value().toInt();
-    uint8_t red = request->getParam("r")->value().toInt();
-    uint8_t blue = request->getParam("b")->value().toInt();
-    uint8_t green = request->getParam("g")->value().toInt();
+    uint8_t hue = request->getParam("h")->value().toInt();
+    uint8_t saturate = request->getParam("s")->value().toInt();
+    uint8_t lightness = request->getParam("l")->value().toInt();
 
-    // Validate RGB range to prevent invalid values
-    if (red > 255 || green > 255 || blue > 255) {
+    // Validate HSL range to prevent invalid values
+    if (hue > 255 || saturate > 255 || lightness > 255) {
       request->send(HTTP_BAD_REQUEST, "text/plain", "Invalid RGB values");
       return;
     }
 
-    updateLed(red, green, blue, ledState);
+    updateLed(hue, saturate, lightness, ledState);
     request->send(HTTP_OK, "text/plain", "OK");
   });
 
