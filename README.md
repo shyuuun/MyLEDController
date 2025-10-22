@@ -11,7 +11,7 @@
 
 -   Microcontroller: ESP32 S2 Mini
 -   LED Strip: WS2812b (60 LEDs)
--   Currently configured for a 5x5 matrix, but can be adjusted in the code
+-   Currently configured 10 LEDs, but can be adjusted in the code
 -   Power Supply: 5V 10A
 -   Libraries Used: FastLED, Arduino
 
