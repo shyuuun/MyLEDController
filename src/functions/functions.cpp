@@ -8,7 +8,6 @@ bool isWifiStationMode() {
   return isStationMode;
 }
 
-
 int normalizeHslForWeb(int value,int max) { 
   return lround((value / 255.0) * max);
 }

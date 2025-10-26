@@ -75,7 +75,7 @@ function colorPick() {
 				l: Math.round((l / 100) * 255), // 0-100 → 0-255
 			};
 		},
-		async sendUpdate() {
+		async sendUpdate(saveToSettings = false) {
 			console.log("Applying settings:");
 			console.log("LED Power:", this.isOn ? "On" : "Off");
 			const normalizedHSL = this.normalizeHslForEsp32(
@@ -88,7 +88,12 @@ function colorPick() {
 
 			// Send settings to the ESP32
 			const ledState = this.isOn ? 1 : 0;
-			const url = `${ENDPOINT.led}?ledState=${ledState}&h=${normalizedHSL.h}&s=${normalizedHSL.s}&l=${normalizedHSL.l}`;
+			let url = `${ENDPOINT.led}?ledState=${ledState}&h=${normalizedHSL.h}&s=${normalizedHSL.s}&l=${normalizedHSL.l}`;
+
+			if (saveToSettings) {
+				url += "&save=1";
+			}
+
 			try {
 				const response = await fetch(url);
 				if (response.ok) {

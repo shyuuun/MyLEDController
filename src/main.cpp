@@ -10,16 +10,22 @@
 #include <web-server/web-server.h>
 #include <error-codes/error-codes.h>
 #include <functions/functions.h>
+#include "settings/settings.h"
 
 char* mDNSName = (char*)"myled";
 
 void setup() {
   Serial.begin(115200);
+
+  initSettings();
+
   setupLED();
+
   if (!LittleFS.begin()) {
     showErrorCode(ERROR_FILESYSTEM_INIT);
     return;
   }
+
 
   if (isStationMode) {
     setupWifi();

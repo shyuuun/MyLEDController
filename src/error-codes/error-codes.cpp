@@ -63,8 +63,14 @@ void showSuccess() {
   // Brief green flash on first LED
   leds[0] = CRGB::Green;
   FastLED.show();
-  delay(100);
-  leds[0] = CRGB::Black;
+  FastLED.delay(500);
+  
+  // Clear all LEDs and restore saved state
+  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  
+  if (ledState) {
+    fill_solid(leds, NUM_LEDS, color);
+  }
   FastLED.show();
 }
 
