@@ -23,6 +23,24 @@
     margin: 0;
     display: flex;
     gap: 1rem;
+    align-items: center;
+  }
+
+  nav ul li {
+    margin: 0;
+  }
+
+  nav a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  nav button {
+    padding: 0.5rem;
+    margin: 0;
   }
 
   pre {
@@ -73,13 +91,23 @@
   <script>
     document.addEventListener('alpine:init', () => {
       Alpine.store('theme', {
-        isDark: true,
-        toggle() {
-          console.log('Toggling dark theme', this.isDark);
-          this.isDark = !this.isDark;
+        isDark: localStorage.getItem('theme') === 'light' ? false : true,
+
+        init() {
+          // Set initial theme based on stored preference
           document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
+        },
+
+        toggle() {
+          this.isDark = !this.isDark;
+          const theme = this.isDark ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+          localStorage.setItem('theme', theme);
         }
       });
+
+      // Initialize theme on load
+      Alpine.store('theme').init();
     });
   </script>
 
@@ -90,6 +118,9 @@
           <li><strong>&DEVICE_NAME&</strong></li>
         </ul>
         <ul>
+          <li><a href="/">🏠 Home</a></li>
+          <li><a href="/wifi">📡 WiFi</a></li>
+          <li><a href="/settings">⚙️ Settings</a></li>
           <li>
             <button @click="$store.theme.toggle()" x-text="$store.theme.isDark ? '🌞' : '🌙'" aria-label="Toggle theme">
             </button>

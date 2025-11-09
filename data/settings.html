@@ -7,13 +7,31 @@
   <link rel="stylesheet" href="css/picocss@2.1.1.css">
 
   <script defer src="js/alpinejs@3.15.0.js"></script>
-  <title>%DEVICE_NAME%</title>
+  <title>LED Settings - %DEVICE_NAME%</title>
 </head>
 <style>
   nav ul {
     margin: 0;
     display: flex;
     gap: 1rem;
+    align-items: center;
+  }
+
+  nav ul li {
+    margin: 0;
+  }
+
+  nav a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  nav button {
+    padding: 0.5rem;
+    margin: 0;
   }
 </style>
 
@@ -21,13 +39,23 @@
   <script>
     document.addEventListener('alpine:init', () => {
       Alpine.store('theme', {
-        isDark: true,
-        toggle() {
-          console.log('Toggling dark theme', this.isDark);
-          this.isDark = !this.isDark;
+        isDark: localStorage.getItem('theme') === 'light' ? false : true,
+
+        init() {
+          // Set initial theme based on stored preference
           document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
+        },
+
+        toggle() {
+          this.isDark = !this.isDark;
+          const theme = this.isDark ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+          localStorage.setItem('theme', theme);
         }
       });
+
+      // Initialize theme on load
+      Alpine.store('theme').init();
     });
   </script>
 
@@ -35,9 +63,12 @@
     <main class="container">
       <nav>
         <ul>
-          <li><strong>%DEVICE_NAME%</strong></li>
+          <li><strong>&DEVICE_NAME&</strong></li>
         </ul>
         <ul>
+          <li><a href="/">🏠 Home</a></li>
+          <li><a href="/wifi">📡 WiFi</a></li>
+          <li><a href="/settings">⚙️ Settings</a></li>
           <li>
             <button @click="$store.theme.toggle()" x-text="$store.theme.isDark ? '🌞' : '🌙'" aria-label="Toggle theme">
             </button>
@@ -49,16 +80,55 @@
         <h2>Settings</h2>
         <p>Adjust your device settings below:</p>
 
-        TODO: add settings form here
-        TODO: add option to select GPIO pin
-        TODO: add option to set default LED color
-        TODO: add option to enable/disable LED on boot
-        TODO: add option to configure WiFi settings
-        TODO: add option to set device name
-        TODO: add option to update firmware
+        <form>
+          <fieldset>
+            <h6>Device Configuration</h6>
 
+            <label for="deviceName">
+              Device Name
+              <input type="text" id="deviceName" name="deviceName" placeholder="MyLED" required>
+              <small>The name used for mDNS and display</small>
+            </label>
+
+            <label for="gpioPin">
+              LED GPIO Pin
+              <input type="number" id="gpioPin" name="gpioPin" min="0" max="39" value="3" required>
+              <small>GPIO pin connected to the LED strip (default: 3)</small>
+            </label>
+
+            <label for="numLeds">
+              Number of LEDs
+              <input type="number" id="numLeds" name="numLeds" min="1" value="10" required>
+              <small>Total number of LEDs in the strip</small>
+            </label>
+          </fieldset>
+
+
+          <fieldset>
+            <h6>Firmware Update</h6>
+
+            <label for="firmwareFile">
+              Upload Firmware (.bin)
+              <input type="file" id="firmwareFile" name="firmwareFile" accept=".bin">
+              <small>Upload new firmware to update your device</small>
+            </label>
+
+            <progress id="uploadProgress" value="0" max="100" style="display:none;"></progress>
+          </fieldset>
+
+          <button type="submit">Save Changes</button>
+          <button type="button" onclick="confirm('Reset all settings to factory defaults?') && resetSettings()">Reset to
+            Defaults</button>
+        </form>
 
       </article>
+
+      <script>
+        function resetSettings() {
+          alert('This feature will be implemented in the backend');
+          // TODO: Call backend endpoint to clear preferences
+        }
+      </script>
 
 
       <footer>

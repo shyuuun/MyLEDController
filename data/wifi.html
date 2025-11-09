@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/picocss@2.1.1.css">
+
+  <script defer src="js/alpinejs@3.15.0.js"></script>
+  <title>WiFi Settings - &DEVICE_NAME&</title>
+</head>
+<style>
+  nav ul {
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  nav ul li {
+    margin: 0;
+  }
+
+  nav a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  nav button {
+    padding: 0.5rem;
+    margin: 0;
+  }
+
+  .network-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .network-item {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background: var(--pico-card-background-color);
+    border: 1px solid var(--pico-muted-border-color);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .network-item:hover {
+    border-color: var(--pico-primary);
+  }
+
+  .network-item.selected {
+    border-color: var(--pico-primary);
+    background: var(--pico-primary-background);
+  }
+
+  .signal-strength {
+    font-size: 1.5rem;
+  }
+</style>
+
+<body>
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('theme', {
+        isDark: localStorage.getItem('theme') === 'light' ? false : true,
+
+        init() {
+          document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
+        },
+
+        toggle() {
+          this.isDark = !this.isDark;
+          const theme = this.isDark ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+          localStorage.setItem('theme', theme);
+        }
+      });
+
+      Alpine.store('theme').init();
+    });
+  </script>
+
+  <div x-data="wifiSettings()">
+    <main class="container">
+      <nav>
+        <ul>
+          <li><strong>&DEVICE_NAME&</strong></li>
+        </ul>
+        <ul>
+          <li><a href="/">🏠 Home</a></li>
+          <li><a href="/wifi">📡 WiFi</a></li>
+          <li><a href="/settings">⚙️ Settings</a></li>
+          <li>
+            <button @click="$store.theme.toggle()" x-text="$store.theme.isDark ? '🌞' : '🌙'" aria-label="Toggle theme">
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <article>
+        <h2>WiFi Configuration</h2>
+
+        <!-- Current Connection Status -->
+        <section>
+          <h3>Current Status</h3>
+          <p>
+            <strong>Status:</strong> <span x-text="connectionStatus"></span><br>
+            <strong>SSID:</strong> <span x-text="currentSSID || 'Not connected'"></span><br>
+            <strong>IP Address:</strong> <span x-text="ipAddress || 'N/A'"></span><br>
+            <strong>Signal Strength:</strong> <span x-text="signalStrength || 'N/A'"></span>
+          </p>
+        </section>
+
+        <!-- WiFi Mode Selection -->
+        <section>
+          <h3>WiFi Mode</h3>
+          <fieldset>
+            <label>
+              <input type="radio" name="wifiMode" value="station" x-model="wifiMode" @change="updateMode()">
+              Station Mode (Connect to existing WiFi)
+            </label>
+            <label>
+              <input type="radio" name="wifiMode" value="ap" x-model="wifiMode" @change="updateMode()">
+              Access Point Mode (Create WiFi network)
+            </label>
+          </fieldset>
+        </section>
+
+        <!-- Station Mode -->
+        <section x-show="wifiMode === 'station'">
+          <h3>Available Networks</h3>
+          <button @click="scanNetworks()" :aria-busy="scanning">
+            <span x-show="!scanning">🔄 Scan Networks</span>
+            <span x-show="scanning">Scanning...</span>
+          </button>
+
+          <ul class="network-list" x-show="networks.length > 0">
+            <template x-for="network in networks" :key="network.ssid">
+              <li class="network-item" :class="{ 'selected': selectedSSID === network.ssid }"
+                @click="selectNetwork(network)">
+                <div>
+                  <strong x-text="network.ssid"></strong>
+                  <small x-show="network.encryption !== 'open'">🔒 Secured</small>
+                </div>
+                <span class="signal-strength" x-text="getSignalIcon(network.rssi)"></span>
+              </li>
+            </template>
+          </ul>
+
+          <form @submit.prevent="connectToNetwork()">
+            <label for="stationSSID">
+              Network Name (SSID)
+              <input type="text" id="stationSSID" x-model="selectedSSID" placeholder="Enter SSID" required>
+            </label>
+
+            <label for="stationPassword">
+              Password
+              <input type="password" id="stationPassword" x-model="password" placeholder="Enter password">
+            </label>
+
+            <button type="submit" :aria-busy="connecting">
+              <span x-show="!connecting">Connect</span>
+              <span x-show="connecting">Connecting...</span>
+            </button>
+          </form>
+        </section>
+
+        <!-- Access Point Mode -->
+        <section x-show="wifiMode === 'ap'">
+          <h3>Access Point Settings</h3>
+          <form @submit.prevent="createAccessPoint()">
+            <label for="apSSID">
+              Network Name (SSID)
+              <input type="text" id="apSSID" x-model="apSSID" placeholder="MyLED-AP" required>
+            </label>
+
+            <label for="apPassword">
+              Password (8+ characters)
+              <input type="password" id="apPassword" x-model="apPassword" placeholder="Leave blank for open network"
+                minlength="8">
+              <small>Leave blank to create an open network (not recommended)</small>
+            </label>
+
+            <label for="apChannel">
+              Channel
+              <input type="number" id="apChannel" x-model="apChannel" min="1" max="13" value="1">
+            </label>
+
+            <button type="submit" :aria-busy="creating">
+              <span x-show="!creating">Create Access Point</span>
+              <span x-show="creating">Creating...</span>
+            </button>
+          </form>
+        </section>
+      </article>
+
+      <footer>
+        <small>Powered by ESP32 & PicoCSS</small>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    function wifiSettings() {
+      return {
+        // Connection status
+        connectionStatus: 'Disconnected',
+        currentSSID: '',
+        ipAddress: '',
+        signalStrength: '',
+
+        // Mode
+        wifiMode: 'station',
+
+        // Station mode
+        scanning: false,
+        connecting: false,
+        networks: [],
+        selectedSSID: '',
+        password: '',
+
+        // AP mode
+        creating: false,
+        apSSID: 'MyLED-AP',
+        apPassword: '',
+        apChannel: 1,
+
+        async init() {
+          await this.loadCurrentStatus();
+        },
+
+        async loadCurrentStatus() {
+          try {
+            const response = await fetch('/api/wifi/status');
+            if (response.ok) {
+              const data = await response.json();
+              this.connectionStatus = data.status || 'Disconnected';
+              this.currentSSID = data.ssid || '';
+              this.ipAddress = data.ip || '';
+              this.signalStrength = data.rssi ? `${data.rssi} dBm` : '';
+              this.wifiMode = data.mode || 'station';
+            }
+          } catch (error) {
+            console.error('Failed to load WiFi status:', error);
+          }
+        },
+
+        async scanNetworks() {
+          this.scanning = true;
+          try {
+            const response = await fetch('/api/wifi/scan');
+            if (response.ok) {
+              const data = await response.json();
+              this.networks = data.networks || [];
+            }
+          } catch (error) {
+            console.error('Failed to scan networks:', error);
+            alert('Failed to scan networks');
+          } finally {
+            this.scanning = false;
+          }
+        },
+
+        selectNetwork(network) {
+          this.selectedSSID = network.ssid;
+        },
+
+        getSignalIcon(rssi) {
+          if (rssi > -50) return '📶';
+          if (rssi > -60) return '📶';
+          if (rssi > -70) return '📡';
+          return '📉';
+        },
+
+        async connectToNetwork() {
+          if (!this.selectedSSID) {
+            alert('Please select or enter a network SSID');
+            return;
+          }
+
+          this.connecting = true;
+          try {
+            const response = await fetch('/api/wifi/connect', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                ssid: this.selectedSSID,
+                password: this.password
+              })
+            });
+
+            if (response.ok) {
+              alert('Connecting to network... Device will restart.');
+              setTimeout(() => this.loadCurrentStatus(), 5000);
+            } else {
+              alert('Failed to connect to network');
+            }
+          } catch (error) {
+            console.error('Connection error:', error);
+            alert('Failed to connect to network');
+          } finally {
+            this.connecting = false;
+          }
+        },
+
+        async createAccessPoint() {
+          this.creating = true;
+          try {
+            const response = await fetch('/api/wifi/ap', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                ssid: this.apSSID,
+                password: this.apPassword,
+                channel: this.apChannel
+              })
+            });
+
+            if (response.ok) {
+              alert('Access Point created! Device will restart.');
+              setTimeout(() => this.loadCurrentStatus(), 3000);
+            } else {
+              alert('Failed to create access point');
+            }
+          } catch (error) {
+            console.error('AP creation error:', error);
+            alert('Failed to create access point');
+          } finally {
+            this.creating = false;
+          }
+        },
+
+        async updateMode() {
+          console.log('WiFi mode changed to:', this.wifiMode);
+        }
+      }
+    }
+  </script>
+
+</body>
+
+</html>

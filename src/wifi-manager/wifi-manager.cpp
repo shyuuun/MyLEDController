@@ -23,7 +23,6 @@ void setupWifi() {
 
   while (WiFi.status() != WL_CONNECTED && timeout > 0) {
     delay(500);
-    // TODO: Add a blinking LED effect to indicate connection attempt;
     Serial.print(".");
     timeout--;
   }

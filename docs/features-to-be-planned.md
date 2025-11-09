@@ -42,8 +42,6 @@ This document outlines planned features for the LED Controller project.
 
 -   [ ] Schedule/timer functionality (turn on/off at specific times)
 -   [ ] Multiple zone control for different LED sections
--   [ ] REST API for third-party integrations
--   [ ] WebSocket support for real-time updates
 
 #### User Interface
 

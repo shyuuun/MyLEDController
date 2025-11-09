@@ -1,0 +1,17 @@
+{
+	"Add HTML Route": {
+		"prefix": "route-html",
+		"body": [
+			"server.on(\"/${1:route}\", HTTP_GET, [](AsyncWebServerRequest *request) {",
+			"  if (LittleFS.exists(\"/${2:file}.html\")) {",
+			"    request->send(LittleFS, \"/${2:file}.html\", \"text/html\", false, indexProcessor);",
+			"  } else {",
+			"    Serial.println(\"Could not find ${2:file}.html\");",
+			"    request->send(HTTP_NOT_FOUND, \"text/plain\", \"404: Not Found\");",
+			"  }",
+			"});",
+			"$0"
+		],
+		"description": "Add a new HTML route with LittleFS file serving"
+	}
+}

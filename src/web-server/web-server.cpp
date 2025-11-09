@@ -46,6 +46,15 @@ void serverRoutes() {
     }
   });
 
+  server.on("/wifi", HTTP_GET, [](AsyncWebServerRequest *request) {
+    if (LittleFS.exists("/wifi.html")) {
+      request->send(LittleFS, "/wifi.html", "text/html", false, indexProcessor);
+    } else {
+      Serial.println("Could not find file.html");
+      request->send(HTTP_NOT_FOUND, "text/plain", "404: Not Found");
+    }
+  });
+
   server.on("/led", HTTP_GET, [](AsyncWebServerRequest *request) {
     // Validate required query parameters
     if (!request->hasParam("ledState") || !request->hasParam("h") || !request->hasParam("s") || !request->hasParam("l")) {

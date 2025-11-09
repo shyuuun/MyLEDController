@@ -100,3 +100,16 @@ void clearAllSettings() {
   preferences.clear();
   preferences.end();  // Close and commit
 }
+
+void setDeviceName(char* deviceName) { 
+  preferences.begin(NAMESPACE, false);
+  preferences.putString("device_name", deviceName);
+  preferences.end();
+}
+
+String getDeviceName(){ 
+  preferences.begin(NAMESPACE, true);
+  String deviceName = preferences.getString("device_name");
+  preferences.end();
+  return deviceName;
+}

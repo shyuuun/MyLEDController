@@ -13,6 +13,7 @@
 #include "settings/settings.h"
 
 char* mDNSName = (char*)"myled";
+char* DEFAULT_DEVICE_NAME = (char*)"LEDController32";
 
 void setup() {
   Serial.begin(115200);
@@ -47,22 +48,22 @@ void setup() {
 }
 
 void loop() {
-  // static unsigned long lastPrint = 0;
+  static unsigned long lastPrint = 0;
 
   // Periodic status update to avoid flooding serial output
-  // if (millis() - lastPrint > 10000) {
-  //   if (isStationMode) {
-  //     Serial.print("Station IP: ");
-  //     Serial.println(WiFi.localIP());
-  //   } else {
-  //     Serial.print("AP IP: ");
-  //     Serial.println(WiFi.softAPIP());
-  //   }
-  //   lastPrint = millis();
-  // }
+  if (millis() - lastPrint > 10000) {
+    if (isStationMode) {
+      Serial.print("Station IP: ");
+      Serial.println(WiFi.localIP());
+    } else {
+      Serial.print("AP IP: ");
+      Serial.println(WiFi.softAPIP());
+    }
+    lastPrint = millis();
+  }
 
   // Prevent watchdog timer resets on ESP32
-  // delay(10);
+  delay(10);
 
   // testing
   // fadeInOut();
