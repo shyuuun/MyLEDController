@@ -1,28 +1,13 @@
-#include <web-server/web-server.h>
-#include <defines.h>
-#include <led/LED.h>
+#include "web-server/web-server.h"
+#include "processors.h"
+#include "defines.h"
+#include "led/LED.h"
 #include "functions/functions.h"
 #include "settings/settings.h"
 
 AsyncWebServer server(80);
 
-String indexProcessor(const String& var) {
-  if (var == "DEVICE_NAME") {
-    return "ESP32 LED Controller";
-  } else if (var == "LED_STATUS") {
-    return ledState ? "1" : "0";
-  } else if (var == "HUE") {
-    return String(normalizeHslForWeb(getHue(), 360));
-  } else if (var == "SATURATE") {
-    return String(normalizeHslForWeb(getSaturation(), 100));
-  } else if (var == "LIGHT") {
-    return String(normalizeHslForWeb(getBrightness(), 100));
-  } else {
-    return String();
-  }
-}
-
-void serverRoutes() {
+void setupRoutes() {
   // Browser download and caches the static files
   // Next 24 hours: Browser uses cached files from disk
   server.serveStatic("/css/", LittleFS, "/css/").setCacheControl("max-age=86400"); // Cache CSS files for 24 hours

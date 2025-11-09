@@ -41,7 +41,7 @@ void setup() {
     }
   }
 
-  serverRoutes();
+  setupRoutes();
   server.begin();
 
   showSuccess();

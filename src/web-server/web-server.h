@@ -8,14 +8,8 @@
 
 extern AsyncWebServer server;
 
-/**
- * @brief Processes template variables in index.HTML
- * @param var The variable name to process.
- * @return The processed value for the variable.
- */
-String indexProcessor(const String& var);
 
 /**
  * @brief Configure all server routes and handlers.
  */
-void serverRoutes();
+void setupRoutes();
