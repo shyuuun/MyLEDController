@@ -29,3 +29,8 @@
 ## Notes
 
 -   Make sure your wiring is correct before powering up. Incorrect wiring can damage your components and also you may have experience weird behavior on the LED strip.
+
+## TODO: 
+
+- Add a example schematic
+    -  Images of actual wiring
