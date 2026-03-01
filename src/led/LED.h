@@ -5,7 +5,7 @@
 // GPIO PIN for the LED
 #define LED_PIN     3  
 
-#define NUM_LEDS 10
+#define NUM_LEDS 300 
 
 #define COLOR_ORDER GRB
 

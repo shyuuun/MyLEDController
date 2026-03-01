@@ -3,11 +3,7 @@
 #include <Esp.h>
 
 // Default to Station mode (connects to existing WiFi)
-bool isStationMode = true;
-
-bool isWifiStationMode() {
-  return isStationMode;
-}
+bool isStationMode = false;
 
 int normalizeHslForWeb(int value,int max) { 
   return lround((value / 255.0) * max);
